@@ -5,6 +5,7 @@ import datetime
 import os
 import sys
 
+import numpy as np
 import pandas as pd
 import psycopg2 as pg
 import matplotlib.pyplot as plt
@@ -185,6 +186,46 @@ def hours_played(conn, year):
         group by 1, 2, 3
         order by 1, 3;""".format(year=year, next_year=year+1)
 
+    df_raw = pd.read_sql(sql, conn)
+    df = df_raw.pivot(index='day_num', columns='hour_num', values='count')
+
+    df_norm = (df - df.mean().mean()) / (df.max().max() - df.min().min())
+
+    # Plot it out
+    fig, ax = plt.subplots(figsize=(24,7))
+    ax.pcolor(df_norm, cmap=plt.cm.Oranges, alpha=0.8)
+
+    # Format
+    plt.gcf()
+
+    # turn off the frame
+    ax.set_frame_on(False)
+
+    # help here from http://stackoverflow.com/questions/14391959/heatmap-in-matplotlib-with-pcolor
+    ax.set_yticks(np.arange(df_norm.shape[0]) + 0.5, minor=False)
+    ax.set_xticks(np.arange(df_norm.shape[1]) + 0.5, minor=False)
+
+    ax.invert_yaxis()
+    ax.xaxis.tick_top()
+
+    ax.set_xticklabels(df_raw.hour_num, minor=False)
+    ax.set_yticklabels(df_raw['day_name'].unique(), minor=False)
+
+    ax.grid(False)
+
+    # Turn off all the ticks
+    ax = plt.gca()
+
+    for t in ax.xaxis.get_major_ticks():
+        t.tick1On = False
+        t.tick2On = False
+    for t in ax.yaxis.get_major_ticks():
+        t.tick1On = False
+        t.tick2On = False
+
+    plt.title("Average Games Per Hour (in UTC) in {}".format(year), y=1.08)
+    plt.savefig("{}_hours_heatmap.png".format(year))
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -199,8 +240,9 @@ def main():
     pg_pass = os.environ.get("PGPASS")
     conn = pg.connect(database="xonstatdb", user=pg_user, password=pg_pass, host="localhost")
 
-    # games_per_month(conn, year)
+    games_per_month(conn, year)
     players_per_month(conn, year)
+    hours_played(conn, year)
 
 
 if __name__ == "__main__":
