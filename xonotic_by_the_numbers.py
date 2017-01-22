@@ -185,7 +185,7 @@ def players_per_month(conn, year):
     plt.xticks(tick_pos, df['month'])
 
     # the label along the Y axis
-    ax1.set_ylabel("Games")
+    ax1.set_ylabel("Players")
 
     # the legend
     plt.legend(loc='best', ncol=3, fontsize='small')
@@ -444,7 +444,7 @@ def weapon_frags_per_month(conn, year):
     for i, month in enumerate(months):
         ax1.text(i + 1.3, bottoms[i] + 3500, str(bottoms[i]), size=8, ha='center')
 
-    plt.title("Weapon Frags Per Month in {} (in thousands)".format(year))
+    plt.title("Weapon Frags Per Month in {}".format(year))
     plt.savefig("{}_weapon_frags_per_month.png".format(year))
 
 
