@@ -91,8 +91,8 @@ def games_per_month(conn, year):
 
         segment_df = df[df.game_type_cd == game_type_cd]
 
-        # create a bar plot, in position bar_1
-        ax1.bar(left=bar_l,
+        # create a bar plot, in position tick_pos
+        ax1.bar(x=tick_pos,
                 height=segment_df['count'],
                 width=bar_width,
                 label=game_type_cd,
@@ -173,8 +173,8 @@ def players_per_month(conn, year):
     ax1.set_axisbelow(True)
     ax1.grid(b=True, which='major', color='#aaaaaa')
 
-    # create a bar plot, in position bar_1
-    ax1.bar(left=bar_l,
+    # create a bar plot, in position tick_pos
+    ax1.bar(x=tick_pos,
             height=df['count'],
             width=bar_width,
             alpha=0.5,
@@ -307,8 +307,8 @@ def weapon_damage_per_month(conn, year):
 
         segment_df = df[df.weapon_cd == weapon_cd]
 
-        # create a bar plot, in position bar_1
-        ax1.bar(left=bar_l,
+        # create a bar plot, in position tick_pos
+        ax1.bar(x=tick_pos,
                 height=segment_df['actual'],
                 width=bar_width,
                 label=weapon_cd,
@@ -403,8 +403,8 @@ def weapon_frags_per_month(conn, year):
 
         segment_df = df[df.weapon_cd == weapon_cd]
 
-        # create a bar plot, in position bar_1
-        ax1.bar(left=bar_l,
+        # create a bar plot, in position tick_pos
+        ax1.bar(x=tick_pos,
                 height=segment_df['frags'],
                 width=bar_width,
                 label=weapon_cd,
