@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 import psycopg2 as pg
 import matplotlib.pyplot as plt
+import seaborn
 
 # the same weapon colors from XonStat
 weapon_colors = {
@@ -74,7 +75,7 @@ def games_per_month(conn, year):
 
     # grid lines
     ax1.set_axisbelow(True)
-    ax1.grid(b=True, which='major', color='#aaaaaa')
+    ax1.grid(b=True, which='major', color='#aaaaaa', linestyle=':')
 
     # HTML colors encoded as a string, indexed by groups of 6 chars
     colors = "1f77b4ff7f0e2ca02cd627289467bd8c564be377c27f7f7fbcbd2217becf"
@@ -171,7 +172,7 @@ def players_per_month(conn, year):
 
     # grid lines
     ax1.set_axisbelow(True)
-    ax1.grid(b=True, which='major', color='#aaaaaa')
+    ax1.grid(b=True, which='major', color='#aaaaaa', linestyle=':')
 
     # create a bar plot, in position tick_pos
     ax1.bar(x=tick_pos,
@@ -186,9 +187,6 @@ def players_per_month(conn, year):
 
     # the label along the Y axis
     ax1.set_ylabel("Players")
-
-    # the legend
-    plt.legend(loc='best', ncol=3, fontsize='small')
 
     # set a buffer around the left and right edge
     plt.xlim([min(tick_pos) - bar_width, max(tick_pos) + bar_width])
@@ -267,8 +265,9 @@ def weapon_damage_per_month(conn, year):
            to_char(create_dt, 'Mon') "month",
            sum(pws.actual) "actual"
         from player_weapon_stats pws join cd_weapon cd on pws.weapon_cd = cd.weapon_cd
-        where pws.create_dt between '2016-01-01' and '2017-01-01'
-        and cd.weapon_cd not in ('vaporizer', 'hook', 'tuba')
+        where pws.create_dt between '{}-01-01' and '{}-01-01'
+        and cd.weapon_cd not in ('vaporizer', 'hook', 'tuba', 'rifle', 'seeker', 'fireball',
+                                 'hlac', 'minelayer', 'blaster')
         group by 1, 2, 3
         order by 1, 2
         ;
@@ -293,7 +292,7 @@ def weapon_damage_per_month(conn, year):
 
     # grid lines
     ax1.set_axisbelow(True)
-    ax1.grid(b=True, which='major', color='#aaaaaa')
+    ax1.grid(b=True, which='major', color='#aaaaaa', linestyle=':')
 
     # tracking where the bottoms of the next bars to be drawn should go
     bottoms = [0] * len(months)
@@ -362,9 +361,9 @@ def weapon_frags_per_month(conn, year):
            to_char(create_dt, 'Mon') "month",
            sum(pws.frags) "frags"
         from player_weapon_stats pws join cd_weapon cd on pws.weapon_cd = cd.weapon_cd
-        where pws.create_dt between '2016-01-01' and '2017-01-01'
+        where pws.create_dt between '{}-01-01' and '{}-01-01'
         and cd.weapon_cd not in ('vaporizer', 'hook', 'tuba', 'rifle', 'seeker', 'fireball',
-                                 'hlac', 'minelayer')
+                                 'hlac', 'minelayer', 'blaster')
         group by 1, 2, 3
         order by 1, 2
         ;
@@ -389,7 +388,7 @@ def weapon_frags_per_month(conn, year):
 
     # grid lines
     ax1.set_axisbelow(True)
-    ax1.grid(b=True, which='major', color='#aaaaaa')
+    ax1.grid(b=True, which='major', color='#aaaaaa', linestyle=':')
 
     # tracking where the bottoms of the next bars to be drawn should go
     bottoms = [0] * len(months)
