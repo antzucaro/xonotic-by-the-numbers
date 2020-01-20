@@ -51,7 +51,7 @@ def games_per_month(conn, year):
                count(*)
         from games
         where create_dt between '{}-01-01' and '{}-01-01'
-        and game_type_cd in ('dm', 'ctf', 'duel', 'cts', 'tdm', 'ft')
+        and game_type_cd in ('dm', 'ctf', 'duel', 'cts', 'tdm', 'ft', 'ca')
         group by 1, 2, 3
         order by 1, 2;
         """.format(year, year+1)
@@ -268,6 +268,7 @@ def weapon_damage_per_month(conn, year):
         where pws.create_dt between '{}-01-01' and '{}-01-01'
         and cd.weapon_cd not in ('vaporizer', 'hook', 'tuba', 'rifle', 'seeker', 'fireball',
                                  'hlac', 'minelayer', 'blaster')
+        and cd.weapon_cd in ('arc', 'crylink', 'devastator', 'electro', 'hagar', 'machinegun', 'mortar', 'shotgun', 'vortex')
         group by 1, 2, 3
         order by 1, 2
         ;
@@ -364,6 +365,7 @@ def weapon_frags_per_month(conn, year):
         where pws.create_dt between '{}-01-01' and '{}-01-01'
         and cd.weapon_cd not in ('vaporizer', 'hook', 'tuba', 'rifle', 'seeker', 'fireball',
                                  'hlac', 'minelayer', 'blaster')
+        and cd.weapon_cd in ('arc', 'crylink', 'devastator', 'electro', 'hagar', 'machinegun', 'mortar', 'shotgun', 'vortex')
         group by 1, 2, 3
         order by 1, 2
         ;
